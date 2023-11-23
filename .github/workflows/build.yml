@@ -39,8 +39,11 @@ jobs:
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          $path = '.\.sonar\scanner'
+          if (-Not (Test-Path -Path $path)) {
+              New-Item -Path $path -ItemType Directory
+          }
+          dotnet tool update dotnet-sonarscanner --tool-path $path
 
       - name: Install Coverlet
         shell: powershell

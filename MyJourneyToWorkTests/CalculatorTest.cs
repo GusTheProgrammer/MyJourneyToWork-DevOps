@@ -15,6 +15,45 @@ namespace MyJourneyToWorkTests
         }
 
         [Test]
+        public void ConvertDistance_MilesToMiles_NoConversion()
+        {
+            var calculator = new Calculator.Calculator { distance = 10, milesOrKms = Calculator.DistanceMeasurement.miles };
+            Assert.That(calculator.convertDistance(), Is.EqualTo(10));
+        }
+
+        [Test]
+        public void SustainabilityWeighting_PetrolMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.petrol, distance = 10, numDays = 5 };
+            double expected = 8 * 10 * (5 * 2); // Assuming the weighting for petrol is 8
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SustainabilityWeighting_DieselMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.deisel, distance = 15, numDays = 3 };
+            double expected = 10 * 15 * (3 * 2); // Assuming the weighting for diesel is 10
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SustainabilityWeighting_HybridMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.hybrid, distance = 20, numDays = 4 };
+            double expected = 6 * 20 * (4 * 2); // Assuming the weighting for hybrid is 6
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SustainabilityWeighting_ElectricMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.electric, distance = 25, numDays = 2 };
+            double expected = 4 * 25 * (2 * 2); // Assuming the weighting for electric is 4
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void SustainabilityWeighting_MotorbikeMode_CalculatesCorrectly()
         {
             var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.motorbike, distance = 30, numDays = 1 };

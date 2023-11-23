@@ -38,17 +38,18 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Install coverlet
-        shell: powershell
+      - name: Install Coverlet
+        run: dotnet tool install --global coverlet.console
+
+      - name: Build
+        run: dotnet build --no-incremental
+
+      - name: Test and collect coverage
+        run: dotnet test MyJourneyToWorkTest/MyJourneyToWorkTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='../CodeCoverage/'
+
+      - name: Begin SonarCloud analysis
         run: |
-          dotnet tool install --global coverlet.console 
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: powershell
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"GusTheProgrammer_MyJourneyToWork-DevOps" /o:"gus-shaal" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=.\MyJourneyToWorkTests\CodeCoverage\coverage.xml
-          dotnet build --no-incremental
-          coverlet .\MyJourneyToWorkTests\bin\Debug\net7.0\MyJourneyToWork.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o=".\MyJourneyToWorkTests\CodeCoverage\coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"GusTheProgrammer_MyJourneyToWork-DevOps" /o:"gus-shaal" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./CodeCoverage/*.xml
+
+      - name: End SonarCloud analysis
+        run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

@@ -89,7 +89,24 @@ namespace MyJourneyToWorkTests
         public void SustainAbilityWeighting_TramMode_CalculatesCorrectly()
         {
             var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.tram, distance = 45, numDays = 5 };
-            double expected = 3 * 45 * (5 * 2); // Assuming the weighting for bus is 3
+            double expected = 3 * 45 * (5 * 2); // Assuming the weighting for tram is 3
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SustainAbilityWeighting_CyclingMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.cycling, distance = 30, numDays = 3, milesOrKms = Calculator.DistanceMeasurement.miles };
+            double expected = 0.005 * 30 * (3 * 2); // Weighting for cycling is 0.005
+            Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
+        }
+
+
+        [Test]
+        public void SustainAbilityWeighting_WalkingMode_CalculatesCorrectly()
+        {
+            var calculator = new Calculator.Calculator { transportMode = Calculator.TransportModes.walking, distance = 10, numDays = 4, milesOrKms = Calculator.DistanceMeasurement.miles };
+            double expected = 0.005 * 10 * (4 * 2); // Weighting for walking is 0.005
             Assert.That(calculator.sustainabilityWeighting, Is.EqualTo(expected));
         }
 
@@ -135,5 +152,6 @@ namespace MyJourneyToWorkTests
             var calculator = new Calculator.Calculator { distance = Calculator.Calculator.distanceMax, milesOrKms = Calculator.DistanceMeasurement.miles };
             Assert.That(calculator.convertDistance(), Is.EqualTo(Calculator.Calculator.distanceMax));
         }
+
     }
 }

@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJourneyToWork", "MyJourneyToWork\MyJourneyToWork.csproj", "{AE68DDD0-2411-45F0-93F8-17BB36E9877F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJourneyToWorkTests", "MyJourneyToWorkTests\MyJourneyToWorkTests.csproj", "{EABCCCAA-B97F-4CD6-B0BB-8C2733F623CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJourneyToWorkTests", "MyJourneyToWorkTests\MyJourneyToWorkTests.csproj", "{EABCCCAA-B97F-4CD6-B0BB-8C2733F623CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJourneyToWorkBDD", "MyJourneyToWorkBDD\MyJourneyToWorkBDD.csproj", "{2C76EC52-6C61-4358-8A3E-C550767FA81C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{EABCCCAA-B97F-4CD6-B0BB-8C2733F623CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABCCCAA-B97F-4CD6-B0BB-8C2733F623CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABCCCAA-B97F-4CD6-B0BB-8C2733F623CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C76EC52-6C61-4358-8A3E-C550767FA81C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C76EC52-6C61-4358-8A3E-C550767FA81C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C76EC52-6C61-4358-8A3E-C550767FA81C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C76EC52-6C61-4358-8A3E-C550767FA81C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

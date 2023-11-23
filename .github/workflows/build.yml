@@ -48,14 +48,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          # Start SonarCloud Analysis
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"GusTheProgrammer_MyJourneyToWork-DevOps" /o:"gus-shaal" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" /d:sonar.verbose=true
-
           # Build the project
           dotnet build --no-incremental
 
           # Generate Coverage Report with Coverlet
           coverlet .\MyJourneyToWorkTests\bin\Debug\net7.0\MyJourneyToWork.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o=".\MyJourneyToWorkTests\CodeCoverage\coverage.xml"
 
+        
+          # Start SonarCloud Analysis
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"GusTheProgrammer_MyJourneyToWork-DevOps" /o:"gus-shaal" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" /d:sonar.verbose=true
+
+         
           # End SonarCloud Analysis
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

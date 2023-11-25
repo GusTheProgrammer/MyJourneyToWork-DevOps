@@ -123,7 +123,7 @@ namespace Calculator
         {
             get
             {
-                // Estimated cost per km for each transportation mode
+                // Estimated cost per mile for each transportation mode
                 var costPerMile = new Dictionary<TransportModes, double>
             {
                 { TransportModes.petrol, 0.16 },

@@ -59,6 +59,10 @@
                     <label asp-for="calculator.sustainabilityWeighting" class="control-label"></label>
                     @Html.DisplayFor(model => model.calculator.sustainabilityWeighting, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
+                <div class="form-group">
+                    <label asp-for="calculator.TransportationCost" class="control-label"></label>
+                    @Html.DisplayFor(model => model.calculator.TransportationCost, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
             }
         </form>
     </div>

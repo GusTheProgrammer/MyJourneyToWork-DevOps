@@ -72,7 +72,7 @@ namespace Calculator
 
                 if (transportMode.Equals(TransportModes.petrol))
                 {
-                    total = transportModeWeighting[(int)TransportModes.petrol] * convertDistance() * (this.numDays*2);
+                    total = transportModeWeighting[(int)TransportModes.petrol] * convertDistance() * (this.numDays * 2);
                 }
                 else if (transportMode.Equals(TransportModes.deisel))
                 {
@@ -115,6 +115,48 @@ namespace Calculator
                     total = transportModeWeighting[(int)TransportModes.walking] * convertDistance() * (this.numDays * 2);
                 }
                 return total;
+            }
+        }
+
+        [DisplayName("Estimated Transportation Cost: €")]
+        public double TransportationCost
+        {
+            get
+            {
+                // Estimated cost per km for each transportation mode
+                var costPerMile = new Dictionary<TransportModes, double>
+            {
+                { TransportModes.petrol, 0.16 },
+                { TransportModes.deisel, 0.20 },
+                { TransportModes.hybrid, 0.014 },
+                { TransportModes.electric, 0.12 },
+                { TransportModes.motorbike, 0.18 },
+                { TransportModes.electricbike, 0.08 },
+            };
+
+                double totalCost;
+
+                
+                double distanceInMiles = convertDistance();
+                int fareIntervals = (int)Math.Ceiling(distanceInMiles / 15); // Calculate the amount of fare intervals (15 miles per trip)
+
+                switch (transportMode)
+                {
+                    case TransportModes.bus:
+                        totalCost = 1.35 * fareIntervals; 
+                        break;
+                    case TransportModes.tram:
+                        totalCost = 2.00 * fareIntervals;
+                        break;
+                    case TransportModes.train:
+                        totalCost = 2.50 * fareIntervals;
+                        break;
+                    default:
+                        totalCost = costPerMile.TryGetValue(transportMode, out double costFactor) ? costFactor * distanceInMiles * numDays : 0;
+                        break;
+                }
+
+                return totalCost;
             }
         }
     }

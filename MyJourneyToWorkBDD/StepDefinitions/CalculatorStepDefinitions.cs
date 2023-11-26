@@ -7,6 +7,8 @@ public class SustainabilityWeightingSteps
 {
     private Calculator.Calculator calculator;
     private double result;
+    private double transportationCost;
+
 
     [Given(@"I have chosen '(.*)' as my transport mode")]
     public void GivenIHaveChosenAsMyTransportMode(string mode)
@@ -38,5 +40,17 @@ public class SustainabilityWeightingSteps
     public void ThenTheResultShouldBe(int expected)
     {
         Assert.AreEqual(expected, result);
+    }
+
+    [When(@"I calculate the transportation cost")]
+    public void WhenICalculateTheTransportationCost()
+    {
+        transportationCost = calculator.TransportationCost;
+    }
+
+    [Then(@"the transportation cost should be '(.*)'")]
+    public void ThenTheTransportationCostShouldBe(double expectedCost)
+    {
+        Assert.AreEqual(expectedCost, transportationCost, 0.01);
     }
 }

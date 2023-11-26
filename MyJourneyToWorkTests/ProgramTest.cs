@@ -52,9 +52,12 @@ public class ProgramTest
         var response = await _client.GetAsync("/error");
         var responseContent = await response.Content.ReadAsStringAsync();
 
-        // Assert
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(responseContent.Contains("An error occurred while processing your request."), Is.True);
+        Assert.Multiple(() =>
+        {
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(responseContent, Does.Contain("An error occurred while processing your request."));
+        });
     }
 
 

@@ -14,6 +14,7 @@ namespace MyJourneyToWork.Pages
 
         public void OnGet()
         {
+            _logger.LogInformation("Privacy page visited.");
         }
     }
 }

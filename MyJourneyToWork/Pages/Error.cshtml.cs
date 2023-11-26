@@ -5,7 +5,6 @@ using System.Diagnostics;
 namespace MyJourneyToWork.Pages
 {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
         public string? RequestId { get; set; }
@@ -22,6 +21,7 @@ namespace MyJourneyToWork.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            _logger.LogInformation("Error page visited. Request ID: {RequestId}", RequestId);
         }
     }
 }

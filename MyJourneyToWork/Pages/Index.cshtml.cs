@@ -14,7 +14,7 @@ namespace MyJourneyToWork.Pages
 
         public void OnGet()
         {
-
+            _logger.LogInformation("Index page visited.");
         }
     }
 }

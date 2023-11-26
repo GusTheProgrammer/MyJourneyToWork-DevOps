@@ -16,3 +16,10 @@ Scenario: Calculate sustainability weighting for electric mode
     And I travel '3' days a week
     When I calculate the sustainability weighting
     Then the result should be '360'
+
+Scenario: Calculate transportation cost for petrol mode
+    Given I have chosen 'petrol' as my transport mode
+    And I set the distance to '20' miles
+    And I travel '5' days a week
+    When I calculate the transportation cost
+    Then the transportation cost should be '16'

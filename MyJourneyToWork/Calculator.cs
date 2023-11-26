@@ -30,7 +30,7 @@ namespace Calculator
 
     public class Calculator
     {
-        private List<double> transportModeWeighting = new List<double> { 8, 10, 6, 4, 3, 2, 3, 3, 3, 0.005, 0.005 };
+        private readonly List<double> transportModeWeighting = new List<double> { 8, 10, 6, 4, 3, 2, 3, 3, 3, 0.005, 0.005 };
 
         public const int distanceMin = 1;
         public const int distanceMax = 1000;

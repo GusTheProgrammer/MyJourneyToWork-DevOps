@@ -201,8 +201,7 @@ public class CalculatorTests
         calculator.transportMode = TransportModes.bus;
         calculator.distance = 25; // More than 15 miles
         calculator.milesOrKms = DistanceMeasurement.miles;
-        // Fixed fare is 1.35 every 15 miles
-        double expectedCost = 1.35 * 2;
+        double expectedCost = 1.35 * 2; // Fixed fare is 1.35 every 15 miles
         Assert.That(calculator.TransportationCost, Is.EqualTo(expectedCost));
     }
 

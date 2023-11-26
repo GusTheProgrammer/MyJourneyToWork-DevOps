@@ -24,7 +24,7 @@ public class IndexModelTests
     public void Constructor_InitializesLogger()
     {
         // Assert
-        Assert.IsNotNull(_indexModel);
+        Assert.That(_indexModel, Is.Not.Null);
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class ErrorModelTests
     public void Constructor_InitializesLogger()
     {
         // Assert
-        Assert.IsNotNull(_errorModel);
+        Assert.That(_errorModel, Is.Not.Null);
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class ErrorModelTests
         _errorModel.RequestId = "test-request-id";
 
         // Act & Assert
-        Assert.IsTrue(_errorModel.ShowRequestId);
+        Assert.That(_errorModel.ShowRequestId, Is.True);
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class ErrorModelTests
         _errorModel.RequestId = null;
 
         // Act & Assert
-        Assert.IsFalse(_errorModel.ShowRequestId);
+        Assert.That(_errorModel.ShowRequestId, Is.False);
     }
 
 
@@ -142,7 +142,7 @@ public class PrivacyModelTests
     public void Constructor_InitializesLogger()
     {
         // Assert
-        Assert.IsNotNull(_privacyModel);
+        Assert.That(_privacyModel, Is.Not.Null);
     }
 
     [Test]

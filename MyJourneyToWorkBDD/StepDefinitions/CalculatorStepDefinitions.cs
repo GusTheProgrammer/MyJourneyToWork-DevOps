@@ -13,13 +13,18 @@ public class SustainabilityWeightingSteps
     [Given(@"I have chosen '(.*)' as my transport mode")]
     public void GivenIHaveChosenAsMyTransportMode(string mode)
     {
-        calculator = new Calculator.Calculator();
-        calculator.transportMode = (TransportModes)Enum.Parse(typeof(TransportModes), mode);
+        calculator = new Calculator.Calculator
+        {
+            transportMode = (TransportModes)Enum.Parse(typeof(TransportModes), mode)
+        };
     }
 
     [Given(@"I set the distance to '(.*)' miles")]
     public void GivenISetTheDistanceToMiles(int distance)
     {
+        if (calculator == null)
+            throw new InvalidOperationException("Calculator is not initialized.");
+
         calculator.distance = distance;
         calculator.milesOrKms = DistanceMeasurement.miles;
     }
@@ -27,12 +32,18 @@ public class SustainabilityWeightingSteps
     [Given(@"I travel '(.*)' days a week")]
     public void GivenITravelDaysAWeek(int days)
     {
+        if (calculator == null)
+            throw new InvalidOperationException("Calculator is not initialized.");
+
         calculator.numDays = days;
     }
 
     [When(@"I calculate the sustainability weighting")]
     public void WhenICalculateTheSustainabilityWeighting()
     {
+        if (calculator == null)
+            throw new InvalidOperationException("Calculator is not initialized.");
+
         result = calculator.sustainabilityWeighting;
     }
 
@@ -45,6 +56,9 @@ public class SustainabilityWeightingSteps
     [When(@"I calculate the transportation cost")]
     public void WhenICalculateTheTransportationCost()
     {
+        if (calculator == null)
+            throw new InvalidOperationException("Calculator is not initialized.");
+
         transportationCost = calculator.TransportationCost;
     }
 

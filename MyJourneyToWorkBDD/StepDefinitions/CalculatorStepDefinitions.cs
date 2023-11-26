@@ -5,7 +5,7 @@ namespace MyJourneyToWorkBDD.StepDefinitions;
 [Binding]
 public class SustainabilityWeightingSteps
 {
-    private Calculator.Calculator calculator;
+    private Calculator.Calculator? calculator;
     private double result;
     private double transportationCost;
 

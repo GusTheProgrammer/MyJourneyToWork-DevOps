@@ -137,6 +137,13 @@ jobs:
           dotnet-version: "7.x"
           include-prerelease: true
 
+      - name: Install Playwright Dependencies
+        run: |
+          cd MyJourneyToWorkE2E
+          dotnet add package Microsoft.Playwright
+          dotnet build
+          pwsh bin/Debug/net7.0/playwright.ps1 install
+
       - name: Run E2E Tests
         run: |
           cd MyJourneyToWorkE2E

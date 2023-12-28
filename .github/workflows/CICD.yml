@@ -80,6 +80,7 @@ jobs:
 
   build_for_deploy:
     runs-on: windows-latest
+    needs: build_and_analyze
     steps:
       - uses: actions/checkout@v4
 
@@ -103,7 +104,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build_and_analyze
+    needs: build_for_deploy
     environment:
       name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}

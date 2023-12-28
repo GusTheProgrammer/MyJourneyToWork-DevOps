@@ -123,3 +123,21 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F6F4D93526F4C2A9EC48B6960D01538 }}
           package: .
+
+  e2e_tests:
+    needs: deploy
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "7.x"
+          include-prerelease: true
+
+      - name: Run E2E Tests
+        run: |
+          cd MyJourneyToWorkE2E
+          dotnet test -- NUnit.NumberOfTestWorkers=5

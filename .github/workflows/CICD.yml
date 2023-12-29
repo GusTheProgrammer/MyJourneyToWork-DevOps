@@ -106,7 +106,7 @@ jobs:
     runs-on: windows-latest
     needs: build_for_deploy
     environment:
-      name: "Production"
+      name: "QA"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -123,31 +123,8 @@ jobs:
           slot-name: "QA"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_QA }}
           package: .
-
-  deploy:
-    runs-on: windows-latest
-    needs: build_for_deploy
-    environment:
-      name: "Production"
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "MyJourneytowork-gus"
-          slot-name: "Production"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F6F4D93526F4C2A9EC48B6960D01538 }}
-          package: .
-
   e2e_tests:
-    needs: deploy
+    needs: deploy_to_qa
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
@@ -170,3 +147,25 @@ jobs:
         run: |
           cd MyJourneyToWorkE2E
           dotnet test -- NUnit.NumberOfTestWorkers=5
+
+  deploy:
+    runs-on: windows-latest
+    needs: build_for_deploy
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "MyJourneytowork-gus"
+          slot-name: "Production"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F6F4D93526F4C2A9EC48B6960D01538 }}
+          package: .

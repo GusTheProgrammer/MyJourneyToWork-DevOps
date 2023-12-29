@@ -168,10 +168,10 @@ jobs:
         with:
           app-name: "MyJourneytowork-gus"
           slot-name: "staging"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_QA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_STAGING }}
           package: .
 
-  deploy:
+  deploy_to_production:
     runs-on: windows-latest
     needs: build_for_deploy
     environment:

@@ -123,6 +123,7 @@ jobs:
           slot-name: "QA"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_QA }}
           package: .
+
   e2e_tests:
     needs: deploy_to_qa
     runs-on: windows-latest
@@ -147,6 +148,28 @@ jobs:
         run: |
           cd MyJourneyToWorkE2E
           dotnet test -- NUnit.NumberOfTestWorkers=5
+
+  deploy_to_staging:
+    runs-on: windows-latest
+    needs: build_for_deploy
+    environment:
+      name: "Staging"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to QA Environment
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "MyJourneytowork-gus"
+          slot-name: "staging"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_QA }}
+          package: .
 
   deploy:
     runs-on: windows-latest

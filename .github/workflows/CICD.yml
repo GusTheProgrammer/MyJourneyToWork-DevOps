@@ -8,11 +8,6 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
-env:
-  QA_SLOT_NAME: qa
-  BLUE_WEB_APP: blue-myjourneytowork
-  GREEN_WEB_APP: green-myjourneytowork
-
 jobs:
   build_and_analyze:
     name: Build, Test, and Analyze
@@ -110,6 +105,10 @@ jobs:
   deploy_to_qa:
     runs-on: windows-latest
     needs: build_for_deploy
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -117,9 +116,10 @@ jobs:
           name: .net-app
 
       - name: Deploy to QA Environment
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "MyJourneytowork-${{ env.QA_SLOT_NAME }}"
+          app-name: "MyJourneytowork-gus"
           slot-name: "QA"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_QA }}
           package: .

@@ -151,7 +151,7 @@ jobs:
 
   deploy_to_staging:
     runs-on: windows-latest
-    needs: deploy_to_qa
+    needs: e2e_tests
     environment:
       name: "Staging"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -169,28 +169,6 @@ jobs:
           app-name: "MyJourneytowork-gus"
           slot-name: "staging"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_STAGING }}
-          package: .
-
-  deploy_to_blue:
-    runs-on: windows-latest
-    needs: deploy_to_staging
-    environment:
-      name: "Blue"
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "MyJourneytowork-gus"
-          slot-name: "Blue"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BLUE }}
           package: .
 
   deploy_to_production:
@@ -217,8 +195,8 @@ jobs:
 
   swap-to-green-slot:
     runs-on: ubuntu-latest
-    environment: Dev
-    needs: deploy_to_blue
+    environment: Production
+    needs: deploy_to_staging
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@main
@@ -232,4 +210,4 @@ jobs:
         uses: Azure/cli@v1
         with:
           inlineScript: |
-            az webapp deployment slot swap --slot 'Blue' --resource-group ${{ secrets.AZURE_RG }} --name MyJourneytowork-gus
+            az webapp deployment slot auto-swap --name MyJourneytowork-gus --resource-group ${{ secrets.AZURE_RG }} --slot staging

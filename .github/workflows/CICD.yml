@@ -149,9 +149,57 @@ jobs:
           cd MyJourneyToWorkE2E
           dotnet test -- NUnit.NumberOfTestWorkers=5
 
+  k6_load_test:
+    needs: deploy_to_qa
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run local k6 test
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: MyJourneyToWorkPerfTests/loadTest.js
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+  k6_spike_test:
+    needs: deploy_to_qa
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run local k6 test
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: MyJourneyToWorkPerfTests/spikeTest.js
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+  k6_stress_test:
+    needs: deploy_to_qa
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run local k6 test
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: MyJourneyToWorkPerfTests/stressTest.js
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
   deploy_to_staging:
     runs-on: windows-latest
-    needs: e2e_tests
+    needs: [e2e_tests, k6_load_test]
     environment:
       name: "Staging"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}

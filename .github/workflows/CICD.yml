@@ -196,7 +196,7 @@ jobs:
   swap-to-green-slot:
     runs-on: ubuntu-latest
     environment: Production
-    needs: deploy_to_staging
+    needs: deploy_to_production
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@main
@@ -210,4 +210,4 @@ jobs:
         uses: Azure/cli@v1
         with:
           inlineScript: |
-            az webapp deployment slot auto-swap --name MyJourneytowork-gus --resource-group ${{ secrets.AZURE_RG }} --slot staging
+            az webapp deployment slot auto-swap --name MyJourneytowork-gus --resource-group MyJourneyToWork --slot staging

@@ -151,7 +151,7 @@ jobs:
 
   deploy_to_staging:
     runs-on: windows-latest
-    needs: build_for_deploy
+    needs: deploy_to_qa
     environment:
       name: "Staging"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -171,9 +171,31 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_STAGING }}
           package: .
 
+  deploy_to_blue:
+    runs-on: windows-latest
+    needs: deploy_to_staging
+    environment:
+      name: "Blue"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "MyJourneytowork-gus"
+          slot-name: "Blue"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BLUE }}
+          package: .
+
   deploy_to_production:
     runs-on: windows-latest
-    needs: build_for_deploy
+    needs: deploy_to_staging
     environment:
       name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -192,3 +214,28 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F6F4D93526F4C2A9EC48B6960D01538 }}
           package: .
+
+  swap-to-green-slot:
+    runs-on: ubuntu-latest
+    environment: Dev
+    needs: deploy_to_blue
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@main
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Get App Name"
+        id: getwebappname
+        run: |
+          a=$(az webapp list -g ${{ secrets.AZURE_RG }} --query '[].{Name:name}' -o tsv)
+          echo "::set-output name=appName::$a"
+
+      - name: "Swap to green slot"
+        uses: Azure/cli@v1
+        with:
+          inlineScript: |
+            az webapp deployment slot swap --slot 'Blue' --resource-group ${{ secrets.AZURE_RG }} --name ${{ steps.getwebappname.outputs.appName }}

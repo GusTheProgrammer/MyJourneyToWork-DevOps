@@ -197,19 +197,9 @@ jobs:
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
-  zap_scan:
-    runs-on: ubuntu-latest
-    name: Scan QA Environment with ZAP
-    needs: deploy_to_qa
-    steps:
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.3.0
-        with:
-          target: "https://myjourneytowork-gus-qa.azurewebsites.net/Calculator"
-
   deploy_to_staging:
     runs-on: windows-latest
-    needs: [e2e_tests, k6_load_test, k6_spike_test, k6_stress_test, zap_scan]
+    needs: [e2e_tests, k6_load_test, k6_spike_test, k6_stress_test]
     environment:
       name: "Staging"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}

@@ -167,7 +167,7 @@ jobs:
 
   k6_spike_test:
     needs: deploy_to_qa
-    name: k6 Load Test
+    name: k6 Spike Test
     runs-on: ubuntu-latest
 
     steps:
@@ -183,7 +183,7 @@ jobs:
 
   k6_stress_test:
     needs: deploy_to_qa
-    name: k6 Load Test
+    name: k6 Stress Test
     runs-on: ubuntu-latest
 
     steps:

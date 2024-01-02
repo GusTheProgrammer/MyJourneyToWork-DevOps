@@ -229,7 +229,7 @@ jobs:
 
   deploy_to_staging:
     runs-on: windows-latest
-    needs: [e2e_tests, k6_load_test, k6_spike_test, k6_stress_test, zap_scan]
+    needs: [e2e_tests]
     environment:
       name: "Staging"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}

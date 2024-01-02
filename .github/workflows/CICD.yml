@@ -199,6 +199,7 @@ jobs:
 
   zap_scan:
     runs-on: ubuntu-latest
+    needs: build_and_analyze
     name: Scan the web application
     steps:
       - name: Checkout

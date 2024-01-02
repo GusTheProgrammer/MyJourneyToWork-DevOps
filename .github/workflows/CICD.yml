@@ -87,32 +87,9 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-  # build_for_deploy:
-  #   runs-on: windows-latest
-  #   needs: build_and_analyze
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Set up .NET Core
-  #       uses: actions/setup-dotnet@v1
-  #       with:
-  #         dotnet-version: "7.x"
-  #         include-prerelease: true
-
-  #     - name: Build with dotnet
-  #       run: dotnet build --configuration Release
-
-  #     - name: dotnet publish
-  #       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-  #     - name: Upload artifact for deployment job
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: .net-app
-  #         path: ${{env.DOTNET_ROOT}}/myapp
-
   deploy_to_qa:
     runs-on: windows-latest
+    name: Deploy to QA
     needs: build_and_analyze
     environment:
       name: "QA"
@@ -135,6 +112,7 @@ jobs:
 
   e2e_tests:
     needs: deploy_to_qa
+    name: Run E2E Tests
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
@@ -225,6 +203,7 @@ jobs:
   #         cmd_options: "-a"
 
   deploy_to_staging:
+    name: Deploy to Staging
     runs-on: windows-latest
     needs: [e2e_tests]
     environment:
@@ -246,7 +225,8 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_STAGING }}
           package: .
 
-  swap-to-green-slot:
+  swap-to-staging-slot:
+    name: Swap to Staging Slot
     runs-on: ubuntu-latest
     environment: Production
     needs: deploy_to_staging
